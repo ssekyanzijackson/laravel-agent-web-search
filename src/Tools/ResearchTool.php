@@ -12,8 +12,12 @@ use Stringable;
  * What a thing is: one call searches the web and reads the top sources back, returning short
  * sourced extracts so the model can answer with depth.
  */
+use HomesUg\WebSearch\Concerns\HasSettings;
+
 class ResearchTool implements Tool
 {
+    use HasSettings;
+
     public function __construct(private ?DonsetchClient $client = null) {}
 
     public function description(): Stringable|string
@@ -84,19 +88,5 @@ class ResearchTool implements Tool
         return [
             'topic' => $schema->string()->description('A short topic name, for example "mailo land tenure".')->required(),
         ];
-    }
-
-    /**
-     * Read a setting through whichever config layer is present: the framework helper in a Laravel
-     * app, the container binding in a standalone test, the default when neither exists.
-     */
-    private function setting(string $key, mixed $default = null): mixed
-    {
-        // In a Laravel app the app() helper answers; standalone tests bind the same container.
-        $container = function_exists('app') ? app() : \Illuminate\Container\Container::getInstance();
-
-        return $container->bound('config')
-            ? $container->make('config')->get($key, $default)
-            : $default;
     }
 }

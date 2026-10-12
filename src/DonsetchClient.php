@@ -13,8 +13,12 @@ use Symfony\Component\Process\Process;
  * Every call is bounded by config deadlines, and every failure returns null so callers can fall
  * back instead of throwing on the request path.
  */
+use HomesUg\WebSearch\Concerns\HasSettings;
+
 class DonsetchClient
 {
+    use HasSettings;
+
     public function available(): bool
     {
         return (bool) $this->setting('web-search.enabled', true) && $this->binary() !== null;
@@ -178,19 +182,5 @@ class DonsetchClient
         }
 
         return null;
-    }
-
-    /**
-     * Read a setting through whichever config layer is present: the framework helper in a Laravel
-     * app, the container binding in a standalone test, the default when neither exists.
-     */
-    private function setting(string $key, mixed $default = null): mixed
-    {
-        // In a Laravel app the app() helper answers; standalone tests bind the same container.
-        $container = function_exists('app') ? app() : \Illuminate\Container\Container::getInstance();
-
-        return $container->bound('config')
-            ? $container->make('config')->get($key, $default)
-            : $default;
     }
 }

@@ -4,6 +4,17 @@
     "license": "MIT",
     "type": "library",
     "keywords": ["laravel", "ai", "agent", "web-search", "tools"],
+    "homepage": "https://github.com/homesug/laravel-agent-web-search",
+    "authors": [
+        {
+            "name": "Homes.ug",
+            "homepage": "https://homes.ug"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/homesug/laravel-agent-web-search/issues",
+        "source": "https://github.com/homesug/laravel-agent-web-search"
+    },
     "require": {
         "php": "^8.2",
         "illuminate/config": "^11.0|^12.0|^13.0",
@@ -15,6 +26,12 @@
         "psr-4": {
             "HomesUg\\WebSearch\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "php tests/run.php"
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "laravel": {

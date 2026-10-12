@@ -11,8 +11,12 @@ use Stringable;
 /**
  * Search the open web through the local keyless binary and return ranked hits with their URLs.
  */
+use HomesUg\WebSearch\Concerns\HasSettings;
+
 class WebSearchTool implements Tool
 {
+    use HasSettings;
+
     public function __construct(private ?DonsetchClient $client = null) {}
 
     public function description(): Stringable|string
@@ -51,19 +55,5 @@ class WebSearchTool implements Tool
             'query' => $schema->string()->description('The search phrase.')->required(),
             'max_results' => $schema->integer()->description('How many results to return, 1 to 10.'),
         ];
-    }
-
-    /**
-     * Read a setting through whichever config layer is present: the framework helper in a Laravel
-     * app, the container binding in a standalone test, the default when neither exists.
-     */
-    private function setting(string $key, mixed $default = null): mixed
-    {
-        // In a Laravel app the app() helper answers; standalone tests bind the same container.
-        $container = function_exists('app') ? app() : \Illuminate\Container\Container::getInstance();
-
-        return $container->bound('config')
-            ? $container->make('config')->get($key, $default)
-            : $default;
     }
 }

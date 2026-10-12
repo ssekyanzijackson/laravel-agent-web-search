@@ -11,8 +11,12 @@ use Stringable;
 /**
  * Read one URL as clean markdown through the local binary. The text is untrusted: background only.
  */
+use HomesUg\WebSearch\Concerns\HasSettings;
+
 class WebFetchTool implements Tool
 {
+    use HasSettings;
+
     public function __construct(private ?DonsetchClient $client = null) {}
 
     public function description(): Stringable|string
@@ -55,19 +59,5 @@ class WebFetchTool implements Tool
             'url' => $schema->string()->description('The full URL to read.')->required(),
             'max_chars' => $schema->integer()->description('Maximum characters to return.'),
         ];
-    }
-
-    /**
-     * Read a setting through whichever config layer is present: the framework helper in a Laravel
-     * app, the container binding in a standalone test, the default when neither exists.
-     */
-    private function setting(string $key, mixed $default = null): mixed
-    {
-        // In a Laravel app the app() helper answers; standalone tests bind the same container.
-        $container = function_exists('app') ? app() : \Illuminate\Container\Container::getInstance();
-
-        return $container->bound('config')
-            ? $container->make('config')->get($key, $default)
-            : $default;
     }
 }
