@@ -111,11 +111,11 @@ composer test
 ```
 
 The suite runs against a stub engine for every JSON shape, plus a live probe against a real
-`donsetch` when one is installed. CI runs it on PHP 8.2, 8.3 and 8.4.
+`donsetch` when one is installed. CI runs it on PHP 8.3 and 8.4.
 
 ## Compatibility
 
-- PHP 8.2+, Laravel 11, 12 and 13
+- PHP 8.3+, Laravel 11, 12 and 13
 - Any provider through `laravel/ai`, including providers without native search
 - Linux and macOS hosts (the engine is a local binary)
 
