@@ -2,6 +2,7 @@
 
 namespace AgentWebSearch;
 
+use AgentWebSearch\Console\InstallCommand;
 use Illuminate\Support\ServiceProvider;
 
 class WebSearchServiceProvider extends ServiceProvider
@@ -16,6 +17,8 @@ class WebSearchServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
+            $this->commands([InstallCommand::class]);
+
             $this->publishes([
                 __DIR__.'/../config/web-search.php' => config_path('web-search.php'),
             ], 'web-search');

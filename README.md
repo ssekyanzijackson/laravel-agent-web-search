@@ -4,8 +4,13 @@ Keyless web search and read tools that drop into any Laravel AI agent, on any pr
 
 ```bash
 composer require ssekyanzijackson/laravel-agent-web-search
-npm install -g donsetch   # the local engine, AGPL, installed separately
+php artisan web-search:install
 ```
+
+`web-search:install` installs the engine through npm when Node is present, tells you the exact
+fallback when it is not, and reports success when it is already there. (Composer deliberately does
+not run dependency scripts, so npm cannot ride along with `composer require`; this command is the
+one-step equivalent.)
 
 ```php
 use AgentWebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
@@ -57,7 +62,7 @@ tool calling included, on any model that can call tools.
 
 ```bash
 composer require ssekyanzijackson/laravel-agent-web-search
-npm install -g donsetch
+php artisan web-search:install
 ```
 
 Laravel discovers the provider automatically. Publish the config if you want to edit it:

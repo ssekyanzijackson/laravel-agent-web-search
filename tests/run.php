@@ -47,6 +47,8 @@ function check(string $label, bool $ok): void
 
 $client = new DonsetchClient;
 
+check('the install command ships', class_exists(AgentWebSearch\Console\InstallCommand::class));
+
 check('the client detects the binary', $client->available());
 
 $hits = $client->search('mailo land tenure');
