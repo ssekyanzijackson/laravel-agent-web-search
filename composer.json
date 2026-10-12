@@ -1,6 +1,6 @@
 {
     "name": "ssekyanzijackson/laravel-agent-web-search",
-    "description": "Keyless web search and read tools for any Laravel AI agent: measured deadlines, batched reads, works on any provider.",
+    "description": "Give your Laravel AI agent access to the internet: keyless web search and read tools that work on any provider, with measured deadlines and batched reads.",
     "license": "MIT",
     "type": "library",
     "keywords": ["laravel", "ai", "agent", "web-search", "tools"],

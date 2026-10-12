@@ -1,6 +1,10 @@
 # Laravel Agent Web Search
 
-Keyless web search and read tools that drop into any Laravel AI agent, on any provider.
+### Give your AI agent access to the internet.
+
+Keyless web search and read tools that drop into any Laravel AI agent, on any provider. No API key,
+no quota, no per-query bill: a local engine your agent can search and read with, on every model
+that can call tools.
 
 ```bash
 composer require ssekyanzijackson/laravel-agent-web-search
