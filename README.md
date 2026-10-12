@@ -1,27 +1,11 @@
-# Web search for any Laravel AI agent
+# Laravel Agent Web Search
 
 Keyless web search and read tools that drop into any Laravel AI agent, on any provider.
 
-```php
-composer require ssekyanzijackson/laravel-agent-web-search
-```
-
-The engine is [DonSeTch](https://github.com/dondai44423/donsetch), a local keyless search and fetch
-binary (AGPL-3.0, installed separately, never bundled):
-
 ```bash
-npm install -g donsetch
+composer require ssekyanzijackson/laravel-agent-web-search
+npm install -g donsetch   # the local engine, AGPL, installed separately
 ```
-
-## The three tools
-
-| Tool | What it does |
-|---|---|
-| `web_search` | Ranked results with titles, URLs and snippets |
-| `web_fetch` | One URL as clean markdown, with the untrusted-text note |
-| `research` | Searches a topic and reads the top sources back as sourced extracts |
-
-Add them to any agent:
 
 ```php
 use Ssekyanzijackson\WebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
@@ -32,43 +16,112 @@ public function tools(): array
 }
 ```
 
-Every tool implements the Laravel AI tool contract, so they work with any provider, DeepSeek
-included, which has no native search.
+## The problem this solves
 
-## Why it behaves
+An agent without web access answers from stale training data, and says it with confidence.
 
-The defaults are measured, not guessed:
+The usual fixes all have a cost: provider-native search only works on some providers (DeepSeek has
+none, and Gemini's grounding is billed per search query), and hosted search APIs mean another key,
+another quota, and another bill.
 
-- **Search deadline 3s**: Bing and DuckDuckGo answer in about 1 to 2 seconds; blocked engines
-  waste the rest. The cap keeps a search at about 2 to 4 seconds.
-- **Fetch deadline 6s, batched**: the top pages are read in one call, so the wait is one page,
-  not their sum.
-- **No binary, no crash**: without an install, the tools answer "no local search binary is
-  installed" and the agent carries on.
+This package takes a third path: a **local, keyless engine** wrapped in three ordinary Laravel AI
+tools. When the binary is installed the agent can search the web and read pages. When it is not,
+the tools answer "no local search binary is installed" and nothing else changes.
 
-Publish the config with `php artisan vendor:publish --tag=web-search`; every value is
-env-overridable (`WEB_SEARCH_BINARY`, `WEB_SEARCH_SEARCH_DEADLINE_MS`, ...).
+## The engine: DonSeTch
 
-## BYOK, optional
+[DonSeTch](https://github.com/dondai44423/donsetch) is a Rust binary that searches 10+ engines in
+parallel, fuses the results by cross-engine consensus plus a local semantic rerank, and fetches
+pages as clean markdown, including PDFs and bot-walled pages. No account, no API key, no per-query
+cost. It is AGPL-3.0 and installed separately; nothing of it is bundled in this package.
 
-DonSeTch can front paid providers (Tavily, Brave, Exa, Serper) with automatic fallback to the
-keyless engines. Add a key on the host and coverage improves with no code change:
+You can also point it at paid providers when you want more coverage, with automatic fallback to the
+keyless engines:
 
 ```bash
-donsetch keys add tavily tvly-...
+donsetch keys add tavily tvly-...     # or bravesearch, exa, serper, brightdata
 ```
+
+## The three tools
+
+| Tool | Use it for | Returns |
+|---|---|---|
+| `web_search` | Current facts, local sources, anything outside the model knowledge | Ranked hits: title, URL, snippet |
+| `web_fetch` | Reading one URL the model or the user named | The page as markdown, plus the untrusted-text note |
+| `research` | "What is this thing": a law, an institution, a process | Short extracts from the top sources, with their names and URLs |
+
+They implement the Laravel AI tool contract, so they work with every provider the SDK supports,
+tool calling included, on any model that can call tools.
+
+## Install
+
+```bash
+composer require ssekyanzijackson/laravel-agent-web-search
+npm install -g donsetch
+```
+
+Laravel discovers the provider automatically. Publish the config if you want to edit it:
+
+```bash
+php artisan vendor:publish --tag=web-search
+```
+
+Optional: `donsetch doctor` on a new host shows which engines that network can reach.
+
+## Configuration
+
+| Env | Default | Why |
+|---|---|---|
+| `WEB_SEARCH_ENABLED` | `true` | Switch the tools off without removing them |
+| `WEB_SEARCH_BINARY` | `donsetch` | Auto-detected on PATH, or an absolute path |
+| `WEB_SEARCH_SEARCH_DEADLINE_MS` | `3000` | Bing and DuckDuckGo answer within seconds; blocked engines would otherwise hold the call |
+| `WEB_SEARCH_FETCH_DEADLINE_MS` | `6000` | The read side has its own budget, shared across the pages of one call |
+| `WEB_SEARCH_TIMEOUT` | `25` | The hard process timeout, above every deadline |
+| `WEB_SEARCH_MAX_RESULTS` | `4` | Results per search |
+| `WEB_SEARCH_SOURCES` | `2` | How many sources a research call reads back |
+
+## Why the defaults behave
+
+The numbers are not guesses. They were measured on a real deployment:
+
+- **Search**: engines answered in 1.2 to 1.6 seconds; everything after that was waiting on blocked
+  engines. A 3 second cap keeps searches at about 2 to 4 seconds with the same results.
+- **Reads**: the top pages are fetched in **one batched call**, so the wait is the slowest page,
+  not the sum. Two pages land in about 1.7 seconds.
+- **Caching**: the engine caches its own queries, and pages repeat instantly; a research call that
+  was 22 seconds on the first pass settles around 4 to 6 seconds, and repeats are immediate.
+- **Untrusted text**: every answer carries the note that web text is background only, so the model
+  names its source and sends the user to the official body for anything current.
+
+## Without the engine
+
+No binary, no crash. Each tool returns a structured "no local search binary is installed" result
+and the agent carries on with its other tools. This makes the package safe to require in an app
+that may or may not have the engine on the host.
+
+## Testing
+
+```bash
+composer test
+```
+
+The suite runs against a stub engine for every JSON shape, plus a live probe against a real
+`donsetch` when one is installed. CI runs it on PHP 8.2, 8.3 and 8.4.
+
+## Compatibility
+
+- PHP 8.2+, Laravel 11, 12 and 13
+- Any provider through `laravel/ai`, including providers without native search
+- Linux and macOS hosts (the engine is a local binary)
 
 ## Licence
 
-The package is MIT. DonSeTch itself is AGPL-3.0 and is installed and run as an external,
-unmodified binary; no part of it is bundled here.
+This package is MIT. DonSeTch is AGPL-3.0, installed and run as an external, unmodified binary; no
+part of it is bundled here. If you ever distribute a product that embeds the engine itself, review
+that licence with your own counsel.
 
-## Tests
+## Roadmap
 
-```bash
-composer install
-php tests/run.php
-```
-
-The suite runs against a stub engine for the shapes, with a live probe when a real `donsetch`
-is on the machine.
+- An encyclopedia fallback (Wikimedia) for hosts with no engine installed
+- A Pest suite mirroring the framework-free tests
+- Optional read-through caching for repeated research topics
