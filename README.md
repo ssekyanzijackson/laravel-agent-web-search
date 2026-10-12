@@ -138,18 +138,34 @@ The suite runs against a stub engine for every JSON shape, plus a live probe aga
 - An untrusted-text note on every answer, so the model names its source and sends the user to the
   official body for anything current.
 
-## Running in parallel
+## Many searches at once
 
-Nothing here replaces what you already have; it sits beside it.
+There is no key and no quota anywhere in this path, so nothing serializes searches:
 
-- **With provider-native search (Gemini):** keep both. The model can use native grounding where it
-  fits, and these tools where it does not: keyless volume, PDF reads, or a provider that has no
-  search at all. One is a server-side tool, the other ordinary client-side tools; the agent picks.
-- **With hosted APIs (Tavily, Brave, Exa, Serper):** not either/or. The engine fronts them. Add a
+- **Inside one call**, the engine already runs in parallel: it queries 10+ search engines at once
+  and fuses the answers, and reads several pages in a single batched fetch.
+- **Across calls**, the tools are stateless. Two agents, a queue of background jobs, or several
+  visitors searching together each spawn their own local process, and they run simultaneously.
+  Repeated topics hit the engine cache, so the second search of the same subject is nearly free.
+- **Deadlines keep it predictable** under load: every call is capped, so one slow network or one
+  blocked engine cannot pile up.
+
+The honest limit: on a very small host, heavy simultaneous use contends on CPU, because the
+consensus rerank runs locally. For bursts, run research on a queue, keep the default deadlines, and
+let the cache absorb the repeats. If you ever need dozens of concurrent searches per second, the
+engine also ships a persistent server mode; a shared-server client is on the roadmap.
+
+## Alongside what you already have
+
+Nothing here replaces your current search; it sits beside it.
+
+- **With provider-native search (Gemini):** keep both. Native grounding where it suits the budget,
+  these tools for keyless volume, PDF reads, or providers with no search at all. The agent picks.
+- **With hosted APIs (Tavily, Brave, Exa, Serper):** not either/or. The engine fronts them: add a
   key and it tries the provider first, falls back to the keyless engines when credits run out, and
   your application code never changes.
-- **With your own tools:** these are plain `Tool` implementations with no globals and no hooks.
-  Instantiate them per agent, delete them from the array the day you no longer want them.
+- **With your own tools:** plain `Tool` implementations, no globals, no hooks. Add or remove them
+  from the tools array at will.
 
 ## Licence
 
