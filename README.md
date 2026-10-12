@@ -114,6 +114,38 @@ The suite runs against a stub engine for every JSON shape, plus a live probe aga
 - Any provider through `laravel/ai`, including providers without native search
 - Linux and macOS hosts (the engine is a local binary)
 
+## Before and after
+
+**Before**, an agent that needed the web meant picking a compromise:
+
+- Provider-native search: works only on some providers (DeepSeek has none), bills per search query,
+  and leaves you no say in which engines answer.
+- A hosted search API: another key to hold, another quota to watch, another bill, and extraction
+  often sold separately.
+- Hand-rolled scraping: brittle, grey in the engines' terms, and a maintenance tax forever.
+
+**After**, it is one `composer require` and one binary install:
+
+- Three tools in any agent, on any provider the Laravel AI SDK supports, DeepSeek included.
+- No key to leak, no per-query cost, and engine coverage you can inspect with `donsetch doctor`.
+- Pages, PDFs and bot-walled sources read back in one batched call, bounded by deadlines so an
+  agent turn stays responsive.
+- An untrusted-text note on every answer, so the model names its source and sends the user to the
+  official body for anything current.
+
+## Running in parallel
+
+Nothing here replaces what you already have; it sits beside it.
+
+- **With provider-native search (Gemini):** keep both. The model can use native grounding where it
+  fits, and these tools where it does not: keyless volume, PDF reads, or a provider that has no
+  search at all. One is a server-side tool, the other ordinary client-side tools; the agent picks.
+- **With hosted APIs (Tavily, Brave, Exa, Serper):** not either/or. The engine fronts them. Add a
+  key and it tries the provider first, falls back to the keyless engines when credits run out, and
+  your application code never changes.
+- **With your own tools:** these are plain `Tool` implementations with no globals and no hooks.
+  Instantiate them per agent, delete them from the array the day you no longer want them.
+
 ## Licence
 
 This package is MIT. DonSeTch is AGPL-3.0, installed and run as an external, unmodified binary; no
