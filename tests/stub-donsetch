@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# A minimal DonSeTch stand-in for the test suite: the same JSON shapes, no network.
+set -e
+
+command="$1"
+shift
+
+if [ "$command" = "search" ]; then
+    echo '{"meta":{"results":[{"title":"Mailo - Wikipedia","url":"https://example.test/mailo","snippet":"Mailo is a form of land tenure in Uganda."},{"title":"Kibanja guide","url":"https://example.test/kibanja","snippet":"Kibanja is an occupancy interest."}]}}'
+    exit 0
+fi
+
+if [ "$command" = "fetch" ]; then
+    printf '{"results":['
+    first=1
+    for url in "$@"; do
+        [ "$first" -eq 1 ] || printf ','
+        first=0
+        printf '{"url":"%s","ok":true,"content":"# Source page for %s"}' "$url" "$url"
+    done
+    printf ']}\n'
+    exit 0
+fi
+
+exit 1
