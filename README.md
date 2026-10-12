@@ -8,7 +8,7 @@ npm install -g donsetch   # the local engine, AGPL, installed separately
 ```
 
 ```php
-use Ssekyanzijackson\WebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
+use AgentWebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
 
 public function tools(): array
 {

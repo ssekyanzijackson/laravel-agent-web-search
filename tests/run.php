@@ -9,10 +9,10 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use Ssekyanzijackson\WebSearch\DonsetchClient;
-use Ssekyanzijackson\WebSearch\Tools\ResearchTool;
-use Ssekyanzijackson\WebSearch\Tools\WebFetchTool;
-use Ssekyanzijackson\WebSearch\Tools\WebSearchTool;
+use AgentWebSearch\DonsetchClient;
+use AgentWebSearch\Tools\ResearchTool;
+use AgentWebSearch\Tools\WebFetchTool;
+use AgentWebSearch\Tools\WebSearchTool;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ssekyanzijackson\WebSearch\Concerns;
+namespace AgentWebSearch\Concerns;
 
 use Illuminate\Container\Container;
 

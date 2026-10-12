@@ -1,8 +1,8 @@
 <?php
 
-namespace Ssekyanzijackson\WebSearch\Tools;
+namespace AgentWebSearch\Tools;
 
-use Ssekyanzijackson\WebSearch\DonsetchClient;
+use AgentWebSearch\DonsetchClient;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
@@ -11,7 +11,7 @@ use Stringable;
 /**
  * Read one URL as clean markdown through the local binary. The text is untrusted: background only.
  */
-use Ssekyanzijackson\WebSearch\Concerns\HasSettings;
+use AgentWebSearch\Concerns\HasSettings;
 
 class WebFetchTool implements Tool
 {

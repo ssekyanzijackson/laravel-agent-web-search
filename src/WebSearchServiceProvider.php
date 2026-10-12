@@ -1,6 +1,6 @@
 <?php
 
-namespace Ssekyanzijackson\WebSearch;
+namespace AgentWebSearch;
 
 use Illuminate\Support\ServiceProvider;
 

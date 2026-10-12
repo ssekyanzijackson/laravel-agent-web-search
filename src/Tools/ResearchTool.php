@@ -1,8 +1,8 @@
 <?php
 
-namespace Ssekyanzijackson\WebSearch\Tools;
+namespace AgentWebSearch\Tools;
 
-use Ssekyanzijackson\WebSearch\DonsetchClient;
+use AgentWebSearch\DonsetchClient;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
@@ -12,7 +12,7 @@ use Stringable;
  * What a thing is: one call searches the web and reads the top sources back, returning short
  * sourced extracts so the model can answer with depth.
  */
-use Ssekyanzijackson\WebSearch\Concerns\HasSettings;
+use AgentWebSearch\Concerns\HasSettings;
 
 class ResearchTool implements Tool
 {

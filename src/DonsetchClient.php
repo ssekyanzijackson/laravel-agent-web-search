@@ -1,6 +1,6 @@
 <?php
 
-namespace Ssekyanzijackson\WebSearch;
+namespace AgentWebSearch;
 
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\ExecutableFinder;
@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
  * Every call is bounded by config deadlines, and every failure returns null so callers can fall
  * back instead of throwing on the request path.
  */
-use Ssekyanzijackson\WebSearch\Concerns\HasSettings;
+use AgentWebSearch\Concerns\HasSettings;
 
 class DonsetchClient
 {
