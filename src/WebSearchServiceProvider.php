@@ -1,6 +1,6 @@
 <?php
 
-namespace HomesUg\WebSearch;
+namespace Ssekyanzijackson\WebSearch;
 
 use Illuminate\Support\ServiceProvider;
 

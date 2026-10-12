@@ -1,8 +1,8 @@
 <?php
 
-namespace HomesUg\WebSearch\Tools;
+namespace Ssekyanzijackson\WebSearch\Tools;
 
-use HomesUg\WebSearch\DonsetchClient;
+use Ssekyanzijackson\WebSearch\DonsetchClient;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
@@ -11,7 +11,7 @@ use Stringable;
 /**
  * Search the open web through the local keyless binary and return ranked hits with their URLs.
  */
-use HomesUg\WebSearch\Concerns\HasSettings;
+use Ssekyanzijackson\WebSearch\Concerns\HasSettings;
 
 class WebSearchTool implements Tool
 {

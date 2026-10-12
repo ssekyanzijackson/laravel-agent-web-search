@@ -1,6 +1,6 @@
 <?php
 
-namespace HomesUg\WebSearch\Concerns;
+namespace Ssekyanzijackson\WebSearch\Concerns;
 
 use Illuminate\Container\Container;
 

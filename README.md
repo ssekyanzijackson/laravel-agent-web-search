@@ -3,7 +3,7 @@
 Keyless web search and read tools that drop into any Laravel AI agent, on any provider.
 
 ```php
-composer require homesug/laravel-agent-web-search
+composer require ssekyanzijackson/laravel-agent-web-search
 ```
 
 The engine is [DonSeTch](https://github.com/dondai44423/donsetch), a local keyless search and fetch
@@ -24,7 +24,7 @@ npm install -g donsetch
 Add them to any agent:
 
 ```php
-use HomesUg\WebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
+use Ssekyanzijackson\WebSearch\Tools\{WebSearchTool, WebFetchTool, ResearchTool};
 
 public function tools(): array
 {

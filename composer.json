@@ -1,19 +1,19 @@
 {
-    "name": "homesug/laravel-agent-web-search",
+    "name": "ssekyanzijackson/laravel-agent-web-search",
     "description": "Keyless web search and read tools for any Laravel AI agent: measured deadlines, batched reads, works on any provider.",
     "license": "MIT",
     "type": "library",
     "keywords": ["laravel", "ai", "agent", "web-search", "tools"],
-    "homepage": "https://github.com/homesug/laravel-agent-web-search",
+    "homepage": "https://github.com/ssekyanzijackson/laravel-agent-web-search",
     "authors": [
         {
-            "name": "Homes.ug",
-            "homepage": "https://homes.ug"
+            "name": "Jackson Mwesigwa",
+            "homepage": "https://github.com/ssekyanzijackson"
         }
     ],
     "support": {
-        "issues": "https://github.com/homesug/laravel-agent-web-search/issues",
-        "source": "https://github.com/homesug/laravel-agent-web-search"
+        "issues": "https://github.com/ssekyanzijackson/laravel-agent-web-search/issues",
+        "source": "https://github.com/ssekyanzijackson/laravel-agent-web-search"
     },
     "require": {
         "php": "^8.2",
@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "HomesUg\\WebSearch\\": "src/"
+            "Ssekyanzijackson\\WebSearch\\": "src/"
         }
     },
     "scripts": {
@@ -36,7 +36,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "HomesUg\\WebSearch\\WebSearchServiceProvider"
+                "Ssekyanzijackson\\WebSearch\\WebSearchServiceProvider"
             ]
         }
     },
